@@ -147,7 +147,7 @@ const Home: NextPage<Props> = ({ readme, tag, releaseNote, tags, release }) => {
             sx={{ py: 2, minWidth: "max-content" }}
             onClick={() => setDialogOpen(true)}
           >
-            過去バージョン
+            別バージョン
           </Button>
           <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
             <DialogTitle>バージョンを選択</DialogTitle>
