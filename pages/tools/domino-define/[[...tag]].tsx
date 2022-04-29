@@ -30,20 +30,6 @@ const components: Components = {
 
 const baseUrl = "https://api.github.com/repos/kamekyame/el-domino_define";
 
-async function getRelease(tag?: string | string[]) {
-  let url = `${baseUrl}/releases/`;
-  if (tag) {
-    url += "tags/" + (Array.isArray(tag) ? tag[0] : tag);
-  } else {
-    url += "latest";
-  }
-
-  const res = await fetch(url);
-  if (res.ok === false) return;
-  const json = await res.json();
-  return json;
-}
-
 async function getReleases() {
   let url = `${baseUrl}/releases`;
   const res = await fetch(url);
@@ -92,6 +78,16 @@ export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
 
 const Home: NextPage<Props> = ({ readme, tag, releaseNote, tags, release }) => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const transformImageUrl = React.useCallback<
+    NonNullable<React.ComponentProps<typeof ReactMarkdown>["transformImageUri"]>
+  >(
+    (src, _alt, _title) => {
+      const newSrc = `https://raw.githubusercontent.com/kamekyame/el-domino_define/${tag}/${src}`;
+      return newSrc;
+    },
+    [tag]
+  );
   // console.log(release);
   return (
     <Box
@@ -179,12 +175,17 @@ const Home: NextPage<Props> = ({ readme, tag, releaseNote, tags, release }) => {
         component={ReactMarkdown}
         remarkPlugins={[[remarkGfm]]}
         components={components}
+        transformImageUri={transformImageUrl}
         sx={{
           "& h2, & h3, & h4": {
             my: 2,
           },
           "& p": {
             my: 1,
+          },
+          "& img": {
+            maxWidth: "100%",
+            maxHeight: "50vh",
           },
         }}
       >
