@@ -1,32 +1,10 @@
-import React from "react";
-import type { NextPage, GetStaticProps, GetStaticPaths } from "next";
-import {
-  Box,
-  Button,
-  Typography,
-  Dialog,
-  DialogTitle,
-  List,
-  ListItem,
-  Divider,
-} from "@mui/material";
-import ReactMarkdown, { Components } from "react-markdown";
-import remarkGfm from "remark-gfm";
+import React, { useEffect } from "react";
+import type { GetStaticProps, GetStaticPaths } from "next";
+import { useRouter } from "next/router";
+import { Box, Typography } from "@mui/material";
 
 import Title from "../../../src/title";
 import Link from "../../../src/link";
-
-type Props = {
-  readme: string;
-  tag: string;
-  releaseNote: string;
-  tags: string[];
-  release: any;
-};
-
-const components: Components = {
-  h1: () => <></>,
-};
 
 const baseUrl = "https://api.github.com/repos/kamekyame/el-domino_define";
 
@@ -45,7 +23,7 @@ export const getStaticPaths: GetStaticPaths<{ tag: string[] }> = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
+export const getStaticProps: GetStaticProps<{}> = async (ctx) => {
   const paramTag = Array.isArray(ctx.params?.tag)
     ? ctx.params?.tag[0]
     : ctx.params?.tag;
@@ -60,35 +38,20 @@ export const getStaticProps: GetStaticProps<Props> = async (ctx) => {
   if (release === undefined) {
     return { notFound: true };
   }
-  const tag = release.tag_name;
-  const res = await fetch(`${baseUrl}/contents/README.md?ref=${tag}`);
-  const data = await res.json();
-  const readme = Buffer.from(data.content, "base64").toString();
   return {
-    props: {
-      release: release,
-      readme: readme,
-      tag,
-      releaseNote: release.body,
-      tags: releases.map((r: any) => r.tag_name),
-    },
-    revalidate: 60,
+    props: {},
   };
 };
 
-const Home: NextPage<Props> = ({ readme, tag, releaseNote, tags, release }) => {
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+const Home = () => {
+  const router = useRouter();
 
-  const transformImageUrl = React.useCallback<
-    NonNullable<React.ComponentProps<typeof ReactMarkdown>["transformImageUri"]>
-  >(
-    (src, _alt, _title) => {
-      const newSrc = `https://raw.githubusercontent.com/kamekyame/el-domino_define/${tag}/${src}`;
-      return newSrc;
-    },
-    [tag]
-  );
-  // console.log(release);
+  useEffect(() => {
+    setTimeout(() => {
+      router.push("https://www.kamekyame.com/el/domino-define");
+    }, 5000);
+  }, [router]);
+
   return (
     <Box
       sx={{
@@ -103,93 +66,14 @@ const Home: NextPage<Props> = ({ readme, tag, releaseNote, tags, release }) => {
       <Typography align="center" variant="h4" sx={{ m: 5 }}>
         Domino用音源定義ファイル
       </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 4,
-          p: 1,
-          backgroundColor: "#FFE0E0",
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 3,
-            m: 2,
-            width: "max-content",
-          }}
-        >
-          <Typography variant="h5">{tag}</Typography>
-          {release.assets.map((asset: any) => {
-            return (
-              <Button
-                key={asset.id}
-                variant="contained"
-                sx={{ py: 4, minWidth: "max-content", textAlign: "center" }}
-                href={asset.browser_download_url}
-              >
-                ダウンロード
-                <br />
-                {asset.name}
-              </Button>
-            );
-          })}
-
-          <Button
-            variant="outlined"
-            sx={{ py: 2, minWidth: "max-content" }}
-            onClick={() => setDialogOpen(true)}
-          >
-            別バージョン
-          </Button>
-          <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-            <DialogTitle>バージョンを選択</DialogTitle>
-            <List>
-              {tags.map((t, i) => (
-                <Link key={t} href={t} underline="none" color="inherit">
-                  <ListItem button key={t} onClick={() => setDialogOpen(false)}>
-                    {t}
-                    {i === 0 ? "(Latest)" : ""}
-                  </ListItem>
-                </Link>
-              ))}
-            </List>
-          </Dialog>
-        </Box>
-        <Box
-          component={ReactMarkdown}
-          remarkPlugins={[[remarkGfm]]}
-          components={components}
-          sx={{ fontSize: "80%" }}
-        >
-          {releaseNote}
-        </Box>
-      </Box>
-      <Divider textAlign="left" sx={{ my: 2 }}>
-        README
-      </Divider>
-      <Box
-        component={ReactMarkdown}
-        remarkPlugins={[[remarkGfm]]}
-        components={components}
-        transformImageUri={transformImageUrl}
-        sx={{
-          "& h2, & h3, & h4": {
-            my: 2,
-          },
-          "& p": {
-            my: 1,
-          },
-          "& img": {
-            maxWidth: "100%",
-            maxHeight: "50vh",
-          },
-        }}
-      >
-        {readme}
+      <Box sx={{ margin: "auto", textAlign: "center" }}>
+        このページは
+        <Link href="https://www.kamekyame.com/el/domino-define">
+          kamekyame.com/el/domino-define
+        </Link>
+        に移行しました。
+        <br />
+        5秒後に自動的に移動します。
       </Box>
     </Box>
   );

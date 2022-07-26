@@ -43,7 +43,7 @@ const Home: NextPage = () => {
 
       <Box sx={{ maxWidth: "90%" }}>
         <Card>
-          <CardActionArea href="/tools/domino-define">
+          <CardActionArea href="https://www.kamekyame.com/el/domino-define">
             <CardContent>
               <Typography gutterBottom variant="h6">
                 Domino用エレクトーン定義ファイル

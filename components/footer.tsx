@@ -70,9 +70,6 @@ export default function App() {
         <Link href="/" color="inherit">
           Top
         </Link>
-        {/* <Link href="/blog">Blog</Link> */}
-        {/* <Link href="/tools">Tools</Link> */}
-        {/* <Link href="/sztm-bot">Sztm-bot</Link> */}
       </Box>
       <Box
         sx={{
@@ -94,12 +91,6 @@ export default function App() {
         <Link href="https://t7s.kamekyame.com" color="inherit">
           ナナシス関連
         </Link>
-        <Link href="https://el.kamekyame.com" color="inherit">
-          Electone関連
-        </Link>
-        {/* <Link href="/blog">Blog</Link> */}
-        {/* <Link href="/tools">Tools</Link> */}
-        {/* <Link href="/sztm-bot">Sztm-bot</Link> */}
       </Box>
     </AppBar>
   );
