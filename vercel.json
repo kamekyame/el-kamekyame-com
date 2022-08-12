@@ -14,11 +14,6 @@
       "source": "/:path*",
       "destination": "https://kamekyame.com/:path*",
       "permanent": true
-    },
-    {
-      "source": "",
-      "destination": "https://kamekyame.com",
-      "permanent": true
     }
   ]
 }
