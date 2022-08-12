@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/tools/domino-define/:v",
+      "destination": "https://kamekyame.com/el/domino-define/:v",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "destination": "https://kamekyame.com/:path*",
+      "permanent": true
+    }
+  ]
+}
